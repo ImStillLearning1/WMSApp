@@ -1,0 +1,98 @@
+@model WMSApp.Models.Document;
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<h1>Edit Document</h1>
+
+<h4>Document</h4>
+<hr/>
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <input type="hidden" asp-for="DocumentId"/>
+            <div class="form-group">
+                <label asp-for="DocumentNumber" class="control-label"></label>
+                <input asp-for="DocumentNumber" class="form-control"/>
+                <span asp-validation-for="DocumentNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Status"></label>
+                <select asp-for="Status" class="form-control">
+                    <option value="Draft">Draft</option>
+                    <option value="WorkInProgress">Work In Progress</option>
+                    <option value="Completed">Completed</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="DocumentType" class="control-label"></label>
+                <input asp-for="DocumentType" class="form-control"/>
+                <span asp-validation-for="DocumentType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Date" class="control-label"></label>
+                <input asp-for="Date" class="form-control"/>
+                <span asp-validation-for="Date" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CreatedBy" class="control-label"></label>
+                <input asp-for="CreatedBy" class="form-control"/>
+                <span asp-validation-for="CreatedBy" class="text-danger"></span>
+            </div>
+            
+            <input hidden asp-for="Items"/>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary"/>
+            </div>
+        </form>
+    </div>
+</div>
+<div>
+<h3>Items</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Item Name</th>
+            <th>Category</th>
+            <th>Quantity</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>@item.Product.Name</td>
+                <td>@item.Product.Category.Name</td>
+                <td>@item.Quantity</td>
+                <td>
+                    <form asp-action="DeleteItem" method="post">
+                        <input type="hidden" name="itemId" value="@item.DocumentItemId" />
+                        <input type="hidden" name="documentId" value="@Model.DocumentId" />
+                        <input type="submit" value="Delete" />
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (Model.Status == DocumentStatus.Draft || Model.Status == DocumentStatus.WorkInProgress)
+{
+    <form asp-action="AddItem" method="post">
+        <input type="hidden" name="DocumentId" value="@Model.DocumentId" />
+        <label>Item Name:</label>
+        <input type="text" name="ItemName" />
+        <label>Quantity:</label>
+        <input type="number" name="Quantity" />
+        <input type="submit" value="Add Item" />
+    </form>
+}
+</div>
+
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

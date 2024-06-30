@@ -1,0 +1,41 @@
+@model System.Collections.Generic.IEnumerable<WMSApp.Models.Document>
+
+@{
+    ViewData["Title"] = "Documents";
+}
+
+<h1>Documents</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Document Number</th>
+        <th>Status</th>
+        <th>Document Type</th>
+        <th>Date</th>
+        <th>Created By</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.DocumentNumber</td>
+            <td>@item.Status</td>
+            <td>@item.DocumentType</td>
+            <td>@item.Date.ToShortDateString()</td>
+            <td>@item.CreatedBy</td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.DocumentId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.DocumentId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.DocumentId">Delete</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

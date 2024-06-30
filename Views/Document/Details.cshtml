@@ -1,0 +1,79 @@
+@model WMSApp.ViewModels.DocumentViewModel
+
+@{
+    ViewData["Title"] = "Document Details";
+}
+
+<h2>Document Details</h2>
+<p>Status: @Model.Document.Status</p>
+<div>
+    <h4>Document</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Document ID
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Document.DocumentId
+        </dd>
+        <dt class="col-sm-2">
+            Document Type
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Document.DocumentType
+        </dd>
+        <dt class="col-sm-2">
+            Document Date
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Document.DocumentDate.ToString("yyyy-MM-dd")
+        </dd>
+    </dl>
+</div>
+
+<div>
+<h3>Items</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Item Name</th>
+            <th>Category</th>
+            <th>Quantity</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.DocumentItems)
+        {
+            <tr>
+                <td>@item.Product.Name</td>
+                <td>@item.Product.Category.Name</td>
+                <td>@item.Quantity</td>
+                <td>
+                    <form asp-action="DeleteItem" method="post">
+                        <input type="hidden" name="itemId" value="@item.DocumentItemId" />
+                        <input type="hidden" name="documentId" value="@Model.Document.DocumentId" />
+                        <input type="submit" value="Delete" />
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (Model.Document.Status == DocumentStatus.Draft || Model.Document.Status == DocumentStatus.WorkInProgress)
+{
+    <form asp-action="AddItem" method="post">
+        <input type="hidden" name="DocumentId" value="@Model.Document.DocumentId" />
+        <label>Item Name:</label>
+        <input type="text" name="ItemName" />
+        <label>Quantity:</label>
+        <input type="number" name="Quantity" />
+        <input type="submit" value="Add Item" />
+    </form>
+}
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

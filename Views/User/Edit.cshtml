@@ -1,0 +1,31 @@
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model WMSApp.Models.ViewModels.EditUserViewModel
+
+<h2>Edit User</h2>
+
+<form asp-action="Edit">
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="form-group">
+        <label asp-for="UserName" class="control-label"></label>
+        <input asp-for="UserName" class="form-control" readonly/>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="AllRoles" class="control-label">Roles</label>
+        <select asp-for="SelectedRoles" class="form-control" asp-items="@(new SelectList(Model.AllRoles, "Name", "Name", Model.UserRoles))" multiple="multiple">
+        </select>
+    </div>
+    
+    <input type="hidden" asp-for="UserRoles"/>
+    <input type="hidden" asp-for="AllRoles"/>
+    <input type="hidden" asp-for="UserId"/>
+
+    <div class="form-group">
+        <input type="submit" value="Save Changes" class="btn btn-primary"/>
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
